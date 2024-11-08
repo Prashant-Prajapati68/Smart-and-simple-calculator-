@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calculator</title>
+    <style>
+        /* Base styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            background: #333;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            width: 320px;
+        }
+        .display {
+            width: 100%;
+            padding: 10px;
+            background-color: #222;
+            color: #fff;
+            font-size: 1.6em;
+            border: none;
+            text-align: right;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .dark-mode-toggle {
+            grid-column: span 4;
+            background-color: #ff8c00;
+        }
+        .function-btn {
+            background-color: #ff6f61;
+        }
+        .operator {
+            background-color: #4CAF50;
+        }
+        .equals {
+            grid-column: span 2;
+            background-color: #2b80ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" disabled>
+        <div class="buttons">
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('/')">/</button>
+
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('*')">*</button>
+
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="equals" onclick="calculateResult()">=</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+
+            <button class="function-btn" onclick="clearDisplay()">C</button>
+            <button class="function-btn" onclick="deleteLast()">DEL</button>
+            <button class="function-btn" onclick="appendToDisplay('Math.sqrt(')">√</button>
+            <button class="function-btn" onclick="appendToDisplay('**')">^</button>
+
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById("display");
+
+        function appendToDisplay(value) {
+            display.value += value;
+        }
+
+        function calculateResult() {
+            try {
+                display.value = eval(display.value);
+            } catch (error) {
+                display.value = "Error";
+            }
+        }
+
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("light-mode");
+            document.querySelector('.calculator').classList.toggle("light-mode");
+            if (document.body.classList.contains("light-mode")) {
+                document.body.style.backgroundColor = "#f2f2f2";
+                display.style.backgroundColor = "#fff";
+                display.style.color = "#333";
+            } else {
+                document.body.style.backgroundColor = "#1a1a1a";
+                display.style.backgroundColor = "#222";
+                display.style.color = "#fff";
+            }
+        }
+
+        // Support for keyboard input
+        document.addEventListener("keydown", function(event) {
+            if (event.key >= '0' && event.key <= '9' || "+-*/.".includes(event.key)) {
+                appendToDisplay(event.key);
+            } else if (event.key === 'Enter') {
+                calculateResult();
+            } else if (event.key === 'Backspace') {
+                deleteLast();
+            }
+        });
+    </script>
+</body>
+</html>
